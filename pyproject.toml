@@ -1,0 +1,22 @@
+[project]
+name = "pypremise"
+dynamic = ["version"]
+description = "A simple Python project"
+authors = [
+    {name = "Michael A. Hedderich", email = "replace-with-lastname@cis.lmu.de"},
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["pypremise"]
+
+
+[tool.setuptools.package-dir]
+"" = "src"

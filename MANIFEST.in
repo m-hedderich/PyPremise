@@ -1,4 +1,4 @@
-include setup.py
-include pypremise/*.py
-include pypremise/Premise
+include src/pypremise/Premise_Applesilicon
+include src/pypremise/Premise_Linux
 include README.md
+include LICENSE

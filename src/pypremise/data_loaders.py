@@ -28,15 +28,15 @@ from .core import PremiseInstance, Direction
 
 def from_sparse_index_lists(indices: List[List[int]], labels: List[int]) -> List[PremiseInstance]:
     """
-    Creates PremiseInstances from list of index-lists and corresponding misclassifications labels
+    Creates PremiseInstances from list of index-lists and corresponding group labels
     Each index-list contains the items/sparse features of one instance/transaction.
 
-    The labels list contains the (mis)classification labels, one for each instance. 0 means misclassification
-    and 1 means correct classification.
+    The labels list contains the group labels, one for each instance. 0 means this instance is from group 0
+    and 1 means from group 1.
 
     Example: for
-       an instance with features 0,3 that was correctly classified (label=1) and
-       an instance with features 1,3,6 that was misclassified (label=0)
+       an instance with features 0,3 that was from group 1 (label=1) and
+       an instance with features 1,3,6 that was grom group 0 (label=0)
     the parameters would look like
 
     indices = [ [0, 3], [1, 3, 6]]
@@ -53,27 +53,27 @@ def from_sparse_index_lists(indices: List[List[int]], labels: List[int]) -> List
         index_list = sorted(index_list)
 
         if label == 0:
-            label = Direction.MISCLASSIFICATION
+            label = Direction.GROUP_0
         elif label == 1:
-            label = Direction.CORRECT
+            label = Direction.GROUP_1
         else:
-            raise Exception(f"Label must be 0 (= misclassification) or 1 (correct classification), not {label}.")
+            raise Exception(f"Label must be 0 (= group 0) or 1 (group 1), not {label}.")
         instances.append(PremiseInstance(index_list, label))
     return instances
 
 
 def from_dense_index_matrix(indices, labels) -> List[PremiseInstance]:
     """
-    Creates PremiseInstances from a dense index matrix and the corresponding misclassifications labels
+    Creates PremiseInstances from a dense index matrix and the corresponding group labels
     In the matrix, each row is one one instance/transaction. Each column represents a feature. If
     a feature is present in an instance, the corresponding entry is 1, else it is 0.
 
-    The labels contains the (mis)classification labels, one for each instance. 0 means misclassification
-    and 1 means correct classification.
+    The labels list contains the group labels, one for each instance. 0 means this instance is from group 0
+    and 1 means from group 1.
 
     Example: for
-       an instance with features 0,3 that was correctly classified (label=1) and
-       an instance with features 1,2,4 that was misclassified (label=0)
+       an instance with features 0,3 that was in group 1 (label=1) and
+       an instance with features 1,2,4 that was in group 0 (label=0)
     the parameters would look like
 
     indices = [ [1, 0, 0, 1, 0],
@@ -94,18 +94,42 @@ def from_dense_index_matrix(indices, labels) -> List[PremiseInstance]:
     return from_sparse_index_lists(sparse_indices, labels)
 
 
-def from_token_lists(token_lists: List[List[str]], labels: List[int]) -> (List[PremiseInstance],
-                                                                          Mapping[str, int], Mapping[int, str]):
+def from_token_lists(token_lists_group_0: List[List[str]], token_lists_group_1: List[List[str]]) -> tuple[List[PremiseInstance],
+                                                                          Mapping[str, int], Mapping[int, str]]:
     """
-    Creates PremiseInstances from list of token-lists and corresponding misclassifications labels
-    Each token-list contains the tokens of one instance.
-
-    The labels list contains the (mis)classification labels, one for each instance. 0 means misclassification
-    and 1 means correct classification.
+    Creates PremiseInstances from two lists of token-lists (one for group 0 and one for group 1).
 
     Example: for
-       an instance with tokens "a", "brown", "dog" that was correctly classified (label=1) and
-       an instance with features "a", "black", "cat" that was misclassified (label=0)
+       an instance with features "a", "black", "cat" that was from group 0 (label=0)
+       an instance with tokens "a", "brown", "dog" that was from group 1 (label=1) and
+      
+    the parameters would look like
+
+    token_lists_group_0 = [ ["a", "black", "cat"] ]
+    token_lists_group_0 = [ ["a", "brown", "dog"] ]
+
+    The tokens get converted into index lists (on which Premise works). Vocabulary mappings are available to convert
+    from and to this index representation.
+
+    Returns the list of PremiseInstance objects, a vocabulary to map the tokens to their index representations and
+    a reversed vocabulary to map an index to its token.
+    """
+    merged_token_lists = token_lists_group_0 + token_lists_group_1
+    labels = [0] * len(token_lists_group_0) + [1] * len(token_lists_group_1)
+    return from_token_lists_and_labels(merged_token_lists, labels)
+
+def from_token_lists_and_labels(token_lists: List[List[str]], labels: List[int]) -> tuple[List[PremiseInstance],
+                                                                          Mapping[str, int], Mapping[int, str]]:
+    """
+    Creates PremiseInstances from list of token-lists and corresponding group labels
+    Each token-list contains the tokens of one instance.
+
+    The labels list contains the group labels, one for each instance. 0 means this instance is from group 0
+    and 1 means from group 1.
+
+    Example: for
+       an instance with tokens "a", "brown", "dog" that was from group 1 (label=1) and
+       an instance with features "a", "black", "cat" that was from group 0 (label=0)
     the parameters would look like
 
     token_lists = [ ["a", "brown", "dog"], ["a", "black", "cat"]]
@@ -142,11 +166,11 @@ def from_csv_sparse_index_file(path_features: str, path_labels: str, delimiter="
     containing the labels. Each row represents one instance/transaction.
 
     The features are stored in a sparse format, i.e. only those features that occur in an instance are mentioned.
-    For the labels, 0 means misclassification and 1 means correct classification.
+    For the labels, 0 means the instance is from group 0 and 1 means it is from group 1.
 
     Example: for
-      an instance with features 0,3 that was correctly classified (label=1) and
-      an instance with features 1,3,6 that was misclassified (label=0)
+      an instance with features 0,3 that was was from group 1 (label=1) and
+      an instance with features 1,3,6 that was from group 0 (label=0)
     the files would look like (with separator " ")
 
     features.dat:
@@ -174,11 +198,11 @@ def from_csv_dense_index_file(path_features: str, path_labels: str, delimiter=" 
 
     The features are stored in a dense format, i.e. for each feature in a row, if the feature is present,
     a 1 is given. And if it is not present, a 0 is given. All rows need to have the same number of entries/features.
-    For the labels, 0 means misclassification and 1 means correct classification.
+    For the labels, 0 means the instance is from group 0 and 1 means it is from group 1.
 
     Example: for
-      an instance with features 0,3 that was correctly classified (label=1) and
-      an instance with features 1,3,6 that was misclassified (label=0)
+      an instance with features 0,3 that was was from group 1 (label=1) and
+      an instance with features 1,3,6 that was from group 0 (label=0)
     the files would look like (with separator " ")
 
     features.dat:
@@ -199,15 +223,15 @@ def from_csv_dense_index_file(path_features: str, path_labels: str, delimiter=" 
     return from_dense_index_matrix(index_lists, labels)
 
 
-def from_tokenized_file(path_features: str, path_labels: str, delimiter=" ") -> (List[PremiseInstance],
-                                                                                 Mapping[str, int], Mapping[int, str]):
+def from_tokenized_file(path_features: str, path_labels: str, delimiter=" ") -> tuple[List[PremiseInstance],
+                                                                                 Mapping[str, int], Mapping[int, str]]:
     """
     Creates PremiseInstances from a file containing the tokenized words (features) and one file containing the
-    misclassification labels. Each row represents one instance.
+    group labels. Each row represents one instance.
 
     Example: for
-       an instance with tokens "a", "brown", "dog" that was correctly classified (label=1) and
-       an instance with features "a", "black", "cat" that was misclassified (label=0)
+       an instance with tokens "a", "brown", "dog" that was from group 1 (label=1) and
+       an instance with features "a", "black", "cat" that was from group 0 (label=0)
     the parameters would look like (with tokenization delimiter " ")
 
     features.dat:
@@ -311,9 +335,9 @@ def create_fasttext_mapping(path_fasttext: str, voc_index_to_token: Mapping[int,
 
 def get_dummy_data():
     """
-    Some dummy example data that should find "How many" as a misclassification pattern,
-    "When was taken" as correct classification pattern and no pattern about "ducks" as
-    these are not informative about the classification status.
+    Some dummy example data that should find "How many" as a pattern in group 0,
+    "When was taken" as pattern in group 1 and no pattern about "ducks" as
+    these are not informative about the group status.
 
     :return:
     """

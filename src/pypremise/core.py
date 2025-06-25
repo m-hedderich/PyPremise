@@ -24,11 +24,13 @@ from typing import List, Mapping, Optional, Union
 from enum import Enum
 import tempfile
 import time
+import logging
 
+logger = logging.getLogger(__name__)
 
 class Direction(Enum):
-    MISCLASSIFICATION = 0
-    CORRECT = 1
+    GROUP_0 = 0 # former MISCLASSIFIATION (when Premise was just used to identify reasons for misclassification)
+    GROUP_1 = 1 # former CORRECT CLASSIFICATION
 
 
 class PremiseInstance:
@@ -59,29 +61,32 @@ class Pattern:
 class PremiseResult:
 
     def __init__(self, pattern: Pattern, direction: Direction, label0_count: int, label1_count: int, mdl_gain: float,
-                 fisher_value: float):
+                 fisher_value: float, group_0_name: str, group_1_name: str):
         self.pattern: Pattern = pattern
         self.direction: Direction = direction
         self.label0_count = label0_count
         self.label1_count = label1_count
         self.mdl_gain: float = mdl_gain
         self.fisher_value: float = fisher_value
+        self.group_0_name: str = group_0_name
+        self.group_1_name: str = group_1_name
 
     def direction_text(self):
-        return "misclassification" if self.direction == Direction.MISCLASSIFICATION else "correct classification"
+        return self.group_0_name if self.direction == Direction.GROUP_0 else self.group_1_name
 
     def __str__(self):
-        return f"{self.pattern} towards {self.direction_text()} (Instances: {self.label0_count} misclassified, " \
-               f"{self.label1_count} correctly classified)"
+        return f"{self.pattern} towards {self.direction_text()} (Instances: {self.label0_count} in {self.group_0_name}, " \
+               f"{self.label1_count} in {self.group_1_name})"
 
 
 class Premise:
 
     def __init__(self, voc_index_to_token: Optional[Mapping[int, str]] = None,
-                 embedding_index_to_vector: Optional = None, embedding_dimensionality: int = -1,
+                 embedding_index_to_vector: Optional[Mapping] = None, embedding_dimensionality: int = -1,
                  max_neighbor_distance: int = 0,
                  fisher_p_value: float = 0.01, clause_max_overlap: float = 0.05, min_overlap: float = 0.3,
-                 verbose: bool = True):
+                 group_0_name: str = "group 0", group_1_name: str = "group 1",
+                 premise_engine: Optional[str] = None):
 
         if embedding_index_to_vector is not None or embedding_dimensionality > 0 or max_neighbor_distance > 0:
             # if we use embeddings, all values need to be set correctly
@@ -97,7 +102,9 @@ class Premise:
         self.fisher_p_value = fisher_p_value
         self.clause_max_overlap = clause_max_overlap
         self.min_overlap = min_overlap
-        self.verbose = verbose
+        self.group_0_name = group_0_name
+        self.group_1_name = group_1_name
+        self.premise_engine = premise_engine
 
     def find_patterns(self, instances: List[PremiseInstance]):
         import pypremise.io
@@ -123,11 +130,10 @@ class Premise:
         pypremise.io.call_premise_program(feature_file.name, label_file.name, result_file.name, embedding_path,
                                           self.embedding_dimensionality, self.max_neighbor_distance,
                                           self.fisher_p_value, self.clause_max_overlap, self.min_overlap,
-                                          self.verbose)
-        if (self.verbose):
-            print(f"Premise ran for {time.time() - start_time} seconds.")
+                                          self.premise_engine)
+        logger.info(f"Premise ran for {time.time() - start_time} seconds.")
 
-        results = pypremise.io.parse_premise_result(result_file.name)
+        results = pypremise.io.parse_premise_result(result_file.name, self.group_0_name, self.group_1_name)
 
         # clean up temporary files
         feature_file.close()

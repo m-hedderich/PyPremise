@@ -20,8 +20,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import logging
+logging.getLogger(__name__).addHandler(logging.NullHandler())
+
 from pypremise.core import *
 import pypremise.data_loaders as data_loaders
 import pypremise.io as io
 
-__version__ = "0.1.0"
+
+__version__ = "0.2.0"
