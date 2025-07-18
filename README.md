@@ -62,8 +62,12 @@ Currently, PyPremise directly supports  Linux (Ubuntu) and Mac (Apple Silicon, t
 - General introductory example: Jupyter notebook
 - How to evaluate LLM outputs: Jupyter notebook
 - How to explain misclassifications: Jupyter notebook
-- All data loaders: Jupyter notebook
 - How to use word embeddings for more complex results: Jupyter notebook
+
+## Code Reference
+
+- Data loaders: [`data_loaders.py`](./pypremise/data_loaders.py) — for loading data from various formats like NumPy arrays or tokenized text files.  
+  If you want to load your own data, check this file for examples and helper functions.
 
 ## Issues, License & Citation
 
