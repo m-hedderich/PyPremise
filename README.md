@@ -66,7 +66,7 @@ Currently, PyPremise directly supports  Linux (Ubuntu) and Mac (Apple Silicon, t
 
 ## Code Reference
 
-- Data loaders: [`data_loaders.py`](./pypremise/data_loaders.py) — for loading data from various formats like NumPy arrays or tokenized text files.  
+- Data loaders: [`data_loaders.py`](./src/pypremise/data_loaders.py) — for loading data from various formats like NumPy arrays or tokenized text files.  
   If you want to load your own data, check this file for examples and helper functions.
 
 ## Issues, License & Citation
