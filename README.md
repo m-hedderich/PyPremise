@@ -59,15 +59,16 @@ pip install pypremise
 Currently, PyPremise directly supports  Linux (Ubuntu) and Mac (Apple Silicon, the "M" processors). If you want to use PyPremise on a different platform, please follow these instructions.
 
 ## Documentation
-- General introductory example: Jupyter notebook
+- General introductory example: [`general_example.ipynb`](./documentation/general_example.ipynb)
 - How to evaluate LLM outputs: Jupyter notebook
-- How to explain misclassifications: Jupyter notebook
+- How to explain misclassifications: [`missclassification_examples.ipynb`](./documentation/missclassification_examples.ipynb)
 - How to use word embeddings for more complex results: Jupyter notebook
 
 ## Code Reference
 
-- Data loaders: [`data_loaders.py`](./src/pypremise/data_loaders.py) — for loading data from various formats like NumPy arrays or tokenized text files.  
-  If you want to load your own data, check this file for examples and helper functions.
+- Data loaders: [`data_loaders.py`](./src/pypremise/data_loaders.py)
+- This file contains helper functions for loading data from various sources such as token lists, NumPy-like arrays, or CSV files.  
+  If you want to load your own data, refer to this file for examples and supported formats.
 
 ## Issues, License & Citation
 
