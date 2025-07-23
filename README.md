@@ -60,9 +60,9 @@ Currently, PyPremise directly supports  Linux (Ubuntu) and Mac (Apple Silicon, t
 
 ## Documentation
 - General introductory example: [`general_example.ipynb`](./documentation/general_example.ipynb)
-- How to evaluate LLM outputs: Jupyter notebook
+- How to evaluate LLM outputs: [`LLM_outputs_examples.ipynb`](./documentation/LLM_outputs_examples.ipynb)
 - How to explain misclassifications: [`missclassification_examples.ipynb`](./documentation/missclassification_examples.ipynb)
-- How to use word embeddings for more complex results: Jupyter notebook
+- How to use word embeddings for more complex results: [`word_embedding_examples.ipynb`](./documentation/word_embedding_examples.ipynb)
 
 ## Code Reference
 
