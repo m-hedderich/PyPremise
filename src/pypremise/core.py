@@ -108,15 +108,18 @@ class Premise:
 
     def find_patterns(self, instances: List[PremiseInstance]):
         import pypremise.io
+        import os
+
         # the Premise C++ code reads and write to files for in and output
-        feature_file = tempfile.NamedTemporaryFile()
-        label_file = tempfile.NamedTemporaryFile()
-        result_file = tempfile.NamedTemporaryFile()
+        feature_file = tempfile.NamedTemporaryFile(delete=False)
+        label_file = tempfile.NamedTemporaryFile(delete=False)
+        result_file = tempfile.NamedTemporaryFile(delete=False)
+
         pypremise.io.write_dat_content(instances, feature_file.name, label_file.name)
 
         # embeddings
         if self.embedding_index_to_vector is not None:
-            embedding_file = tempfile.NamedTemporaryFile()
+            embedding_file = tempfile.NamedTemporaryFile(delete=False)
             embedding_path = embedding_file.name
             max_feature_index = Premise._get_max_feature_index(instances)
             pypremise.io.write_embedding_file(self.embedding_index_to_vector, embedding_path,
@@ -136,11 +139,11 @@ class Premise:
         results = pypremise.io.parse_premise_result(result_file.name, self.group_0_name, self.group_1_name)
 
         # clean up temporary files
-        feature_file.close()
-        label_file.close()
-        result_file.close()
+        os.remove(feature_file.name)
+        os.remove(label_file.name)
+        os.remove(result_file.name)
         if embedding_file is not None:
-            embedding_file.close()
+            os.remove(embedding_file.name)
 
         # if we have a map from indices to tokens, use it to convert our patterns indices to tokens
         if self.voc_index_to_token is not None:

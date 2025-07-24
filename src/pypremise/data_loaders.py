@@ -106,7 +106,7 @@ def from_token_lists(token_lists_group_0: List[List[str]], token_lists_group_1: 
     the parameters would look like
 
     token_lists_group_0 = [ ["a", "black", "cat"] ]
-    token_lists_group_0 = [ ["a", "brown", "dog"] ]
+    token_lists_group_1 = [ ["a", "brown", "dog"] ]
 
     The tokens get converted into index lists (on which Premise works). Vocabulary mappings are available to convert
     from and to this index representation.
@@ -350,7 +350,7 @@ def get_dummy_data():
                  "How many ducks does one need",
                  "How many ducks and chickens are there",
                  "Are there any ducks",
-                 "Where is the rooster looking at?",
+                 "Where is the rooster looking at",
                  "How many chickens are there",
                  "How many roosters can you see",
 
@@ -368,4 +368,4 @@ def get_dummy_data():
                  "When was the photograph taken where one can see the rooster"]
     sentences = [s.split(" ") for s in sentences]
     labels = [0] * 12 + [1] * 12
-    return from_token_lists(sentences, labels)
+    return from_token_lists_and_labels(sentences, labels)
