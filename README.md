@@ -56,7 +56,7 @@ Install a recent version of Python, then just run
 pip install pypremise
 ```
 
-Currently, PyPremise directly supports Linux (Ubuntu) and Mac (Apple Silicon, the "M" processors). We are currently working on a Windows port.
+Currently, PyPremise directly supports Linux (Ubuntu) and Mac (Apple Silicon, the "M" processors). We are  working on a Windows port (also see "Native Code" section below).
 
 ## Documentation
 - General introductory example: [`general_example.ipynb`](./documentation/general_example.ipynb)
@@ -67,6 +67,16 @@ Currently, PyPremise directly supports Linux (Ubuntu) and Mac (Apple Silicon, th
 ## Code Reference
 
 The file [`data_loaders.py`](./src/pypremise/data_loaders.py) contains helper functions for loading data from various sources such as token lists, NumPy-like arrays, or CSV files. If you want to load your own data, refer to this file for examples and supported formats.
+
+## Native Code
+The core code of the Premise algorithm is implemented in C++ for efficiency and runtime reasons. You ca find it in the original [Premise](https://github.com/uds-lsv/premise) repository. You can use Premise without the PyPremise Python wrapper following the instructions there.
+
+If you have your own compiled version of Premise (e.g. for a currently not supported platform), you can use it in PyPremise via the ``premise_engine`` argument of the pypremise.core.Premise constructor. Just use
+
+```
+Premise(premise_engine="local_path:/path/to/your/premise/binary.exe")
+```
+
 
 ## Issues, License & Citation
 

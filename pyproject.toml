@@ -1,7 +1,7 @@
 [project]
 name = "pypremise"
-dynamic = ["version"]
-description = "A simple Python project"
+version = "0.2.0"
+description = "Python wrapper for the Premise algorithm, a data mining method to identify significant differences between two groups of texts."
 authors = [
     {name = "Michael A. Hedderich", email = "replace-with-lastname@cis.lmu.de"},
 ]
