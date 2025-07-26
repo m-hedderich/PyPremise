@@ -8,7 +8,7 @@ PyPremise is a Python library to makes it easy to run Premise with just a couple
 ## Example Applications
 
 ### Systematic differences between two prompts or two LLMs
-Premise identified, e.g., that changing the last name of the protagonist from Dr. Li to Dr. Smith in a story generation prompt caused - among other differences - a drastic change in the gender distribution (more details and examples [here](https://arxiv.org/abs/2504.15815))
+Premise identified, e.g., that changing the last name of the protagonist from Dr. Li to Dr. Smith in a story generation prompt caused - among other differences - a drastic change in the gender distribution (more details and examples [here](https://aclanthology.org/2025.acl-long.985/))
 
 | Patterns Group 0 (Dr. Li)                                      | Patterns Group 1 (Dr. Smith)       |
 |----------------------------------------------|--------------------------------|
@@ -56,7 +56,7 @@ Install a recent version of Python, then just run
 pip install pypremise
 ```
 
-Currently, PyPremise directly supports  Linux (Ubuntu) and Mac (Apple Silicon, the "M" processors). If you want to use PyPremise on a different platform, please follow these instructions.
+Currently, PyPremise directly supports Linux (Ubuntu) and Mac (Apple Silicon, the "M" processors). We are currently working on a Windows port.
 
 ## Documentation
 - General introductory example: [`general_example.ipynb`](./documentation/general_example.ipynb)
@@ -66,9 +66,7 @@ Currently, PyPremise directly supports  Linux (Ubuntu) and Mac (Apple Silicon, t
 
 ## Code Reference
 
-- Data loaders: [`data_loaders.py`](./src/pypremise/data_loaders.py)
-- This file contains helper functions for loading data from various sources such as token lists, NumPy-like arrays, or CSV files.  
-  If you want to load your own data, refer to this file for examples and supported formats.
+The file [`data_loaders.py`](./src/pypremise/data_loaders.py) contains helper functions for loading data from various sources such as token lists, NumPy-like arrays, or CSV files. If you want to load your own data, refer to this file for examples and supported formats.
 
 ## Issues, License & Citation
 
@@ -79,14 +77,18 @@ If you use this tool in your work, we would be happy if you tell us about it.
 If you use PyPremise to evaluate the output of LLMs, please cite
 
 ```
-@misc{hedderich2025whatsdifferencesupportingusers,
-      title={What's the Difference? Supporting Users in Identifying the Effects of Prompt and Model Changes Through Token Patterns}, 
-      author={Michael A. Hedderich and Anyi Wang and Raoyuan Zhao and Florian Eichin and Barbara Plank},
-      year={2025},
-      eprint={2504.15815},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2504.15815}, 
+@inproceedings{hedderich-etal-2025-whats,
+    title = "What{'}s the Difference? Supporting Users in Identifying the Effects of Prompt and Model Changes Through Token Patterns",
+    author = "Hedderich, Michael A.  and
+      Wang, Anyi  and
+      Zhao, Raoyuan  and
+      Eichin, Florian  and
+      Fischer, Jonas  and
+      Plank, Barbara",
+    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    year = "2025",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.acl-long.985/"
 }
 ```
 
