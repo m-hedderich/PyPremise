@@ -176,8 +176,9 @@ class Premise:
                 time.sleep(0.2)
                 try:
                     os.remove(path)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logging.warning(f"Could not remove {path}: {e}")
+
 
         for f in [feature_path, label_path, result_path]:
             safe_remove(f)

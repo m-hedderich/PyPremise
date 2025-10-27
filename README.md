@@ -65,6 +65,7 @@ We provide several Jupyter Notebooks as tutorials. Ideally, you start with the "
 - How to evaluate LLM outputs ([Spotlight](https://aclanthology.org/2025.acl-long.985/) usecase): [`LLM_outputs_examples.ipynb`](./documentation/LLM_outputs_examples.ipynb)
 - How to explain misclassifications of NLP models (original [Premise](https://aclanthology.org/2025.acl-long.985/) usecase): [`missclassification_examples.ipynb`](./documentation/missclassification_examples.ipynb)
 - How to use word embeddings for more complex results: [`word_embedding_examples.ipynb`](./documentation/word_embedding_examples.ipynb)
+- How to control and interpret log levels: [`logging_tutorial.ipynb`](./documentation/logging_tutorial.ipynb)
 
 If you need additional help, do not hesitate to reach out to us!
 
